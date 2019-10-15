@@ -97,7 +97,7 @@ Currently there are the following fill styles:
     single object without overhangs.
   - `"walls"`: generates a hollow container with walls placed on the
     inside (see "Architectural features" below).
-  - `"test"`: generates a tanktainer with a single tank on the inside.
+  - `"tank"`: generates a tanktainer with a single tank on the inside.
     Most useful with the walls set to `"none"`.
 
 ## Assembly
