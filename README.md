@@ -283,10 +283,10 @@ Here are some of things that could be supported in the future:
 
 (C) 2019 by Philipp Reichmuth (phrxmd)
 
-This work is licensed under a (Creative Commons Attribution-ShareAlike 4.0 International)[https://creativecommons.org/licenses/by-sa/4.0/] License.
+This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) License.
 
 # Acknowledgement
 
 The original idea, as well as a good part of the code was taken from
-(gundyboyz)[https://www.thingiverse.com/gundyboyz/about]' Parametric Shipping Container model published on
-(Thingiverse)[https://www.thingiverse.com/thing:1392128] under a Creative Commons Attribution 3.0 Unported license. 
+[gundyboyz](https://www.thingiverse.com/gundyboyz/about)' Parametric Shipping Container model published on
+[Thingiverse](https://www.thingiverse.com/thing:1392128) under a Creative Commons Attribution 3.0 Unported license. 
