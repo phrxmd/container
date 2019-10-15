@@ -1,5 +1,17 @@
-/* OpenSCAD script to create fully models for shipping containers 
-*/ 
+/* OpenSCAD script to create fully parametric models of shipping containers 
+
+   $Id$
+
+   (C) 2019 by Philipp Reichmuth, philipp.reichmuth@gmail.com 
+   This work is licensed under a Creative Commons 
+   Attribution-ShareAlike 4.0 International License
+   (https://creativecommons.org/licenses/by-sa/4.0/)
+
+   Initial code taken from Parametric Shipping Container
+   (C) gundyboyz, https://www.thingiverse.com/thing:1392128,
+   licensed under Creative Commons Attribution Unported 3.0
+   (https://creativecommons.org/licenses/by/3.0/)
+*/
 
 // Leave the following constants alone!
 // Meaningful names for the indexes into the various vectors
