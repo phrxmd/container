@@ -131,15 +131,15 @@ PLACE_WINDOWS = false;
 PLACE_TEXT_INT = false;
 PLACE_TEXT_EXT = true;
 FEATURES = [
-     opening(wall="right", x=0.5, width=4),
-     window(wall="left", x=0.75, y=0.8, width=1.8, height=1.7),
-     window(wall="back", x=0.3, y=2.05, width=1.8, height=0.3),
-     window(wall="front", x=0.3, y=1.05, width=1.8, height=1.8),
+     opening(wall=RIGHT, x=0.5, width=4),
+     window(wall=LEFT, x=0.75, y=0.8, width=1.8, height=1.7),
+     window(wall=BACK, x=0.3, y=2.05, width=1.8, height=0.3),
+     window(wall=FRONT, x=0.3, y=1.05, width=1.8, height=1.8),
      wall(dir="x", x=1, y=1.2, length=1.5),
      wall(dir="y", x=2.5, y=0.75, length=1.0),
      text_int(text="Robe", x=0.25, y=2.1, size=6),
      text_int(text="Bed 1", x=3.0, y=1.7, size=8),
-     text_bot(text=str("1:",SCALE), x=0.25, y=2.1, size=6)
+     text_ext(text=str("1:",SCALE), x=0.25, y=2.1, size=6)
 ];
 
 // Color the frame differently
@@ -371,7 +371,7 @@ module placePart(wall, style) {
       children();    
 };
 
-module side(style=STYLE_RIGHT, features=FEATURES, dir="right") {
+module side(style=STYLE_RIGHT, features=FEATURES, dir=RIGHT) {
   // By default this generates a "right" side.
   // To generate left sides, we need to translate &
   // rotate it into the correct position.
@@ -402,7 +402,7 @@ module side(style=STYLE_RIGHT, features=FEATURES, dir="right") {
 };
 
 module right(style=STYLE_RIGHT, features=FEATURES) {
-      side(style, features, "right"); 
+      side(style, features, RIGHT); 
 }; 
 
 module left(style=STYLE_LEFT, features=FEATURES) {
@@ -410,10 +410,10 @@ module left(style=STYLE_LEFT, features=FEATURES) {
   // becomes a "left" side
   translate(v=[EXT_L, EXT_W, 0])
     rotate([0,0,180])
-      side(style, features, "left");
+      side(style, features, LEFT);
 };
 
-module face(style=STYLE_FRONT, features=FEATURES, dir="front") {
+module face(style=STYLE_FRONT, features=FEATURES, dir=FRONT) {
   // By default this generates a "front" face.
   // To generate "back" faces, we need to translate & rotate it into the correct position.
   difference() {
@@ -445,7 +445,7 @@ module face(style=STYLE_FRONT, features=FEATURES, dir="front") {
 };
 
 module front(style=STYLE_FRONT, features=FEATURES) {
-  face(style, features, "front");
+  face(style, features, FRONT);
 };
 
 module back(style=STYLE_BACK, features=FEATURES) {
@@ -453,7 +453,7 @@ module back(style=STYLE_BACK, features=FEATURES) {
   // becomes a "back" face
   translate(v=[EXT_L, EXT_W, 0])
     rotate([0,0,180]) 
-      face(style, features, "back");
+      face(style, features, BACK);
 }
 
 module top(style=STYLE_TOP) {
@@ -966,20 +966,20 @@ module createFrame(opening, direction="") {
         
       echo("Placing stuff in direction", opening[DIR]);     
       placement = 
-        opening[DIR] == "left" || opening[DIR] == "right" ? 
+        opening[DIR] == LEFT || opening[DIR] == RIGHT ? 
           [[x(opening) - 1, y(opening), z(opening) - 1], 
            [w(opening) + 2, d(opening), h(opening) + 2]] :
-        opening[DIR] == "back" || opening[DIR] == "front" ?
+        opening[DIR] == BACK || opening[DIR] == FRONT ?
           [[x(opening), y(opening) - 1, z(opening) - 1],
            [w(opening), d(opening) + 2, h(opening) + 2]] :
 //           [w(opening), d(opening) + 2, h(opening) + 2]] :
         [[],[]];
         
       cutoff = 
-        opening[DIR] == "left" || opening[DIR] == "right" ? 
+        opening[DIR] == LEFT || opening[DIR] == RIGHT ? 
           [[0,0,EXT_H], [-90,0,0], [EXT_L,EXT_H], 
            [EXT_L, FRAME_THICKNESS, EXT_H]] : 
-        opening[DIR] == "back" || opening[DIR] == "front" ?
+        opening[DIR] == BACK || opening[DIR] == FRONT ?
           [[0,0,EXT_H], [0,90,0], [EXT_W, EXT_H], 
            [FRAME_THICKNESS, EXT_W, EXT_H] ] :
         [ [], [], [], [] ];
@@ -1013,11 +1013,12 @@ module createWall(wall) {
         if (wall[DIR] == "x") {
             translate (v=[m2mm(wall[X]), m2mm(wall[Y]), THICKNESS_WALL])
             cube(size=[m2mm(wall[W]), THICKNESS_WALL_INT, 
-             EXT_H-(THICKNESS_WALL*2)-TOP_I-TOLERANCE]); 
+              EXT_H-THICKNESS_WALL*2-TOP_I-TOLERANCE]); 
         }
         if (wall[DIR] == "y") {
             translate (v=[m2mm(wall[X]), m2mm(wall[Y]), THICKNESS_WALL])
-            cube(size=[THICKNESS_WALL_INT, m2mm(wall[W]), EXT_H - (THICKNESS_WALL * 3.1)]);
+            cube(size=[THICKNESS_WALL_INT, m2mm(wall[W]), 
+              EXT_H-THICKNESS_WALL*2-TOP_I-TOLERANCE]);
         }
     }
 }
@@ -1042,20 +1043,20 @@ function mev (e,v) = [ for (i = v) [e, i] ];
    exclude the frame bars, as we can't place openings there.
 */
 function x(vec) = 
-  vec[DIR]=="right" || vec[DIR]=="left" ? m2mm(vec[X]) :
-    vec[DIR]=="front" || vec[DIR]=="back" ? 0 : 999;
+  vec[DIR]==RIGHT || vec[DIR]==LEFT ? m2mm(vec[X]) :
+    vec[DIR]==FRONT || vec[DIR]==BACK ? 0 : 999;
 function y(vec) =
-  vec[DIR]=="right" || vec[DIR]=="left" ? 0 :
-    vec[DIR]=="front" || vec[DIR]=="back" ? 
+  vec[DIR]==RIGHT || vec[DIR]==LEFT ? 0 :
+    vec[DIR]==FRONT || vec[DIR]==BACK ? 
       EXT_W - m2mm(vec[W]) - m2mm(vec[X]) : 999;
 function z(vec) = 
   vec[Y] == 0 ? m2mm(FRAME_THICKNESS) : m2mm(vec[Y]);
 function w(vec) =
-  vec[DIR]=="right" || vec[DIR]=="left"? m2mm(vec[W]) :
+  vec[DIR]==RIGHT || vec[DIR]==LEFT? m2mm(vec[W]) :
       vec[D];
 function h(vec) = m2mm(vec[H]);
 function d(vec) = // Depth of cut
-  vec[DIR]=="right" || vec[DIR]=="left" ? vec[D] :
+  vec[DIR]==RIGHT || vec[DIR]==LEFT ? vec[D] :
       m2mm(vec[W]);
 
 // Helpers for easier definition of architectural features
@@ -1067,7 +1068,7 @@ function wall(dir, x, y, length) =
   [WALL, dir, x, y, length];
 function text_int(text, x, y, size, rotate) = 
   [TEXT_INT, text, x, y, size, rotate];
-function text_bot(text, x, y, size, rotate) = 
+function text_ext(text, x, y, size, rotate) = 
   [TEXT_EXT, text, x, y, size, rotate];
 
 // Create all the model objects...
